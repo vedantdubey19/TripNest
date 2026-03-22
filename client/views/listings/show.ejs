@@ -1,0 +1,311 @@
+<% layout("layouts/boilerplate") %>
+<script>
+  const map_Token = "<%=process.env.MAP_TOKEN%>";
+  const listing = <%-JSON.stringify(listing)%>;
+</script>
+
+<style>
+  .hero-section {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 400px;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .main-details {
+    flex: 1;
+    min-width: 0; 
+  }
+
+  /* Booking Card Sidebar */
+  .booking-card-wrapper {
+    flex: 0 0 380px;
+    position: relative;
+  }
+
+  .booking-card {
+    position: sticky;
+    top: 6rem; /* below navbar */
+    background: var(--surface-color);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    z-index: 10;
+  }
+
+  .price-header {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .price-header span {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  .host-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    margin: 1.5rem 0;
+  }
+
+  .host-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+  }
+
+  .review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .review-item {
+    background: var(--surface-light);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+  }
+
+  /* Mock inputs */
+  .mock-input-group {
+    border: 1px solid var(--text-secondary);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    margin-top: 1rem;
+    background: var(--bg-color);
+  }
+  
+  .mock-input {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--text-secondary);
+    font-size: 0.85rem;
+  }
+  
+  .mock-input:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 992px) {
+    .booking-card-wrapper {
+      flex: 1 1 100%;
+      order: -1; /* Move booking card to top on small screens */
+    }
+    .booking-card {
+      position: relative;
+      top: 0;
+    }
+    .hero-section {
+      height: 40vh;
+      border-radius: 0;
+      margin-top: 0;
+      width: 100vw;
+      margin-left: -50vw;
+      left: 50%;
+    }
+  }
+</style>
+
+<div class="container pb-5">
+  <div class="hero-section animate-scale" style="animation-delay: 0.1s;">
+    <img src="<%=listing.image.url%>" class="hero-img" alt="<%= listing.title %>">
+  </div>
+
+  <div class="content-wrapper">
+    <!-- Main Listing Details -->
+    <div class="main-details animate-fade-up" style="animation-delay: 0.2s;">
+      <h1 class="mb-1"><%= listing.title %></h1>
+      <p class="text-secondary fs-5 mb-4"><i class="fa-solid fa-location-dot me-2"></i><%= listing.location %>, <%= listing.country%></p>
+
+      <div class="host-info">
+        <div class="host-avatar">
+          <%= listing.owner.username.charAt(0).toUpperCase() %>
+        </div>
+        <div>
+          <h5 class="mb-0">Hosted by <%= listing.owner.username%></h5>
+          <p class="text-secondary mb-0">Superhost · 5 years hosting</p>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <h4 class="mb-3">About this place</h4>
+        <p class="card-text fs-6 lh-lg" style="color: var(--text-secondary);"><%= listing.description %></p>
+      </div>
+
+      <hr style="border-color: var(--glass-border); margin: 3rem 0;">
+
+      <div class="mb-5">
+        <h4 class="mb-4">Where you'll be</h4>
+        <div id="map"></div>
+      </div>
+
+      <hr style="border-color: var(--glass-border); margin: 3rem 0;">
+
+      <!-- Reviews Section -->
+      <div>
+        <h4 class="mb-4">
+          <i class="fa-solid fa-star me-2 mb-1" style="color: #fbbf24;"></i>
+          <%= listing.reviews.length %> <%= listing.reviews.length === 1 ? 'Review' : 'Reviews' %>
+        </h4>
+
+        <% if(currUser) { %>
+          <div class="card bg-transparent border-0 mb-4">
+            <div class="card-body p-0">
+              <h5 class="mb-3">Leave a review</h5>
+              <form action="/listings/<%=listing._id%>/reviews" method="POST" novalidate class="needs-validation">
+                
+                <div class="mb-3">
+                  <fieldset class="starability-slot">
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                    <label for="first-rate1" title="Terrible">1 star</label>
+                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                    <label for="first-rate2" title="Not good">2 stars</label>
+                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                    <label for="first-rate3" title="Average">3 stars</label>
+                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                    <label for="first-rate4" title="Very good">4 stars</label>
+                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                    <label for="first-rate5" title="Amazing">5 stars</label>
+                  </fieldset>
+                </div>
+
+                <div class="mb-3">
+                  <textarea id="comment" name="review[comment]" cols="10" rows="4" class="form-control bg-transparent text-white" placeholder="Share your experience..." required></textarea>
+                  <div class="invalid-feedback">
+                    Please add some comments for review.
+                  </div>
+                </div>
+
+                <button class="btn btn-primary px-4">Submit Review</button>
+              </form>
+            </div>
+          </div>
+        <% } %>
+
+        <% if(listing.reviews.length > 0) { %>
+          <div class="review-grid">
+            <% for(review of listing.reviews) { %>
+              <div class="review-item">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="host-avatar me-3" style="width: 40px; height: 40px; font-size: 1rem; background: var(--surface-color);">
+                    <%= review.author.username.charAt(0).toUpperCase() %>
+                  </div>
+                  <div>
+                    <h6 class="mb-0">@<%= review.author.username %></h6>
+                    <small class="text-secondary">October 2026</small>
+                  </div>
+                </div>
+                <p class="starability-result card-text mb-2" data-rating="<%=review.rating%>"></p>
+                <p class="card-text text-secondary mb-3"><%=review.comment%></p>
+                
+                <% if(currUser && review.author._id.equals(currUser._id)) { %>
+                  <form method="POST" action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE">
+                    <button class="btn btn-sm btn-outline-danger" style="border-radius: 1rem; padding: 0.2rem 0.8rem;">Delete</button>
+                  </form>
+                <% } %>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div> <!-- End Main Details -->
+
+    <!-- Booking details Sidebar -->
+    <div class="booking-card-wrapper animate-fade-up" style="animation-delay: 0.3s;">
+      <div class="booking-card">
+        <div class="price-header mb-4">
+          ₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> <span>night</span>
+        </div>
+        
+        <form action="/listings/<%=listing._id%>/reservations" method="POST" class="needs-validation" novalidate>
+          <div class="mock-input-group mb-4 p-0">
+             <div class="d-flex w-100 border-bottom border-secondary">
+               <div class="mock-input w-50 border-end border-secondary border-bottom-0 p-2">
+                 <label class="d-block text-uppercase fw-bold m-0" style="font-size: 0.65rem; color: var(--text-secondary);">Check-in</label>
+                 <input type="text" name="reservation[checkIn]" id="checkin-date" class="form-control bg-transparent border-0 text-white p-0 shadow-none mt-1" placeholder="Select date" required>
+               </div>
+               <div class="mock-input w-50 border-bottom-0 p-2">
+                 <label class="d-block text-uppercase fw-bold m-0" style="font-size: 0.65rem; color: var(--text-secondary);">Checkout</label>
+                 <input type="text" name="reservation[checkOut]" id="checkout-date" class="form-control bg-transparent border-0 text-white p-0 shadow-none mt-1" placeholder="Select date" required>
+               </div>
+             </div>
+             <div class="mock-input p-2">
+               <label class="d-block text-uppercase fw-bold m-0" style="font-size: 0.65rem; color: var(--text-secondary);">Guests</label>
+               <input type="number" name="reservation[guests]" class="form-control bg-transparent border-0 text-white p-0 shadow-none mt-1" min="1" value="1" required>
+             </div>
+          </div>
+          <input type="hidden" name="reservation[totalPrice]" value="<%= listing.price %>">
+
+          <button class="btn btn-primary w-100 py-3 fs-5 mb-3 stitch-glow pulse-button border-0">Reserve</button>
+          <p class="text-center text-secondary small mb-4">You won't be charged yet</p>
+        </form>
+
+        <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+          <hr class="my-4" style="border-color: var(--glass-border);">
+          <div class="text-center mb-2 text-secondary small text-uppercase fw-bold">Owner Actions</div>
+          <div class="d-flex gap-2">
+            <a href="/listings/<%=listing._id%>/edit" class="btn btn-outline-light w-50 py-2">Edit</a>
+            <form method="POST" action="/listings/<%=listing._id %>?_method=DELETE" class="w-50">
+              <button class="btn btn-outline-danger w-100 py-2" style="border-radius: 2rem;">Delete</button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+    </div> <!-- End Sidebar -->
+
+  </div>
+</div>
+
+<script src="/js/map.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const checkoutPicker = flatpickr("#checkout-date", {
+      minDate: "today",
+      dateFormat: "Y-m-d",
+      disableMobile: "true"
+    });
+
+    const checkinPicker = flatpickr("#checkin-date", {
+      minDate: "today",
+      dateFormat: "Y-m-d",
+      disableMobile: "true",
+      onChange: function(selectedDates, dateStr, instance) {
+        checkoutPicker.set("minDate", dateStr);
+      }
+    });
+  });
+</script>

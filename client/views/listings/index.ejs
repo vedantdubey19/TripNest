@@ -1,0 +1,205 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .filters-wrapper {
+    position: relative;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+  }
+  
+  .filters {
+    display: flex;
+    overflow-x: auto;
+    padding: 1rem 0;
+    gap: 2rem;
+    align-items: center;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  }
+  
+  .filters::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+  }
+  
+  .filter {
+    flex: 0 0 auto;
+    text-align: center;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-primary);
+    padding: 0.6rem 1.25rem;
+    border-radius: 2rem;
+    background: var(--surface-light);
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  
+  .filter:hover, .filter.active {
+    opacity: 1;
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+  }
+  
+  .filter i {
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, #f43f5e, #8b5cf6, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .filter p {
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .tax-toggle {
+    flex: 0 0 auto;
+    background: var(--surface-color);
+    border: 1px solid var(--glass-border);
+    border-radius: 2rem;
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: var(--transition-fast);
+  }
+  
+  .tax-toggle:hover {
+    background: var(--surface-light);
+    border-color: var(--accent-color);
+  }
+
+  .form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+  }
+
+  @media (max-width: 576px) {
+    .tax-toggle {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  /* Shimmer effect for images loading */
+  .img-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-lg);
+    background: var(--surface-color);
+  }
+</style>
+
+<div class="filters-wrapper">
+  <div class="container-fluid">
+    <div class="filters">
+      <div class="filter active">
+        <i class="fa-solid fa-fire"></i>
+        <p>Trending</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-bed"></i>
+        <p>Rooms</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-mountain-city"></i>
+        <p>Iconic Cities</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-mountain-sun"></i>
+        <p>Mountains</p>
+      </div>
+      <div class="filter">
+        <i class="fa-brands fa-fort-awesome"></i>
+        <p>Castles</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-person-swimming"></i>
+        <p>Pools</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-campground"></i>
+        <p>Camping</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-cow"></i>
+        <p>Farms</p>
+      </div>
+      <div class="filter">
+        <i class="fa-solid fa-snowflake"></i>
+        <p>Arctic</p>
+      </div>
+      <div class="filter">                      
+        <i class="fa-solid fa-tree"></i>
+        <p>Forests</p>
+      </div>
+      <div class="filter">                     
+        <i class="fa-solid fa-umbrella-beach"></i>
+        <p>Beaches</p>
+      </div>
+      
+      <div class="tax-toggle ms-auto">
+        <div class="form-check-reverse form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+          <label class="form-check-label ms-2 cursor-pointer" for="switchCheckDefault">Display total taxes</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid px-4 animate-fade-up" style="animation-delay: 0.1s;">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-1">
+    <% allListings.forEach((listing, i) => { %>
+      <div class="col animate-fade-up" style="animation-delay: <%= 0.1 + (i % 10) * 0.05 %>s;">
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+          <div class="card listing-card h-100">
+            <div class="img-wrapper">
+              <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                <strong class="d-block text-truncate mb-1"><%= listing.title %></strong>
+                <span class="text-secondary d-block"><%= listing.location %>, <%= listing.country %></span>
+                <span class="mt-2 d-block text-primary">
+                  <span class="fw-bold fs-5 text-white">₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></span> <span class="text-secondary">/night</span>
+                  <i class="taxInfo text-secondary fst-normal ms-1" style="display: none; font-size: 0.9em;">+ 18% GST</i>
+                </span>
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<script>
+  let taxSwitch = document.getElementById("switchCheckDefault");
+  taxSwitch.addEventListener("change", () => {
+    let taxInfo = document.getElementsByClassName("taxInfo");
+    for (let info of taxInfo) {
+      if(taxSwitch.checked){
+         info.style.display = "inline";
+      } else {
+         info.style.display = "none";
+      }
+    }
+  });
+
+  // Optional: Add active class toggle for filters
+  document.querySelectorAll('.filter').forEach(filter => {
+    filter.addEventListener('click', function() {
+      document.querySelectorAll('.filter').forEach(f => f.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
