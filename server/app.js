@@ -25,9 +25,15 @@ const { applyTimestamps } = require("./models/review.js");
 
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/tripnest';
 
+if (!process.env.DB_URL && process.env.NODE_ENV === "production") {
+    console.warn("WARNING: DB_URL is not set in production. Falling back to localhost.");
+}
+
 main().then(() => {
-    console.log("Connected to database");
-}).catch(err => console.log(err));
+    console.log("Successfully connected to database");
+}).catch(err => {
+    console.error("CRITICAL ERROR: Failed to connect to database:", err);
+});
 
 async function main() {
     await mongoose.connect(dbUrl);
@@ -97,6 +103,11 @@ app.use((err, req, res, next) => {
     res.render("error.ejs", { message });
 });
 
-app.listen(8080, () => {
-    console.log("Server is listening on port 8080");
-});
+const port = process.env.PORT || 8080;
+if (process.env.NODE_ENV !== "test") {
+    app.listen(port, () => {
+        console.log(`Server is listening on port ${port}`);
+    });
+}
+
+module.exports = app;
