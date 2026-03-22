@@ -70,6 +70,78 @@ const sampleListings = [
     location: "Portland",
     country: "United States",
     geometry: { type: "Point", coordinates: [-122.6784, 45.5152] }
+  },
+  {
+    title: "Taj Mahal Panorama - Luxury Penthouse",
+    description: "Enjoy an unobstructed, private view of the Taj Mahal from your ultra-modern penthouse balcony. Featuring marble interiors and world-class service, this is Agra's most exclusive address.",
+    image: {
+      filename: "listingimage",
+      url: "/images/taj_mahal.png",
+    },
+    price: 5000,
+    location: "Agra",
+    country: "India",
+    geometry: { type: "Point", coordinates: [78.0422, 27.1751] }
+  },
+  {
+    title: "Jaipur Royal Palace Suite",
+    description: "Experience the grandeur of Rajasthan in this meticulously restored palace suite. Modern luxury meets heritage architecture in the heart of the Pink City.",
+    image: {
+      filename: "listingimage",
+      url: "/images/jaipur_palace.png",
+    },
+    price: 3500,
+    location: "Jaipur",
+    country: "India",
+    geometry: { type: "Point", coordinates: [75.8163, 26.9124] }
+  },
+  {
+    title: "Munnar Tea Estate Villa",
+    description: "Wake up to misty mountains and lush green tea gardens. This contemporary glass villa offers panoramic views of Munnar's serene landscape.",
+    image: {
+      filename: "listingimage",
+      url: "/images/munnar_villa.png",
+    },
+    price: 1800,
+    location: "Munnar",
+    country: "India",
+    geometry: { type: "Point", coordinates: [77.0601, 10.0889] }
+  },
+  {
+    title: "Goa Beachfront Bliss",
+    description: "A sleek, modern infinity pool villa on a secluded beach. Perfect for those seeking luxury, privacy, and the soothing sound of the Arabian Sea.",
+    image: {
+      filename: "listingimage",
+      url: "/images/goa_beach.png",
+    },
+    price: 2500,
+    location: "South Goa",
+    country: "India",
+    geometry: { type: "Point", coordinates: [73.9299, 15.2993] }
+  },
+  {
+    title: "Varanasi Heritage Ghats Stay",
+    description: "A beautiful boutique stay on the banks of the Ganges. Immerse yourself in the spiritual heart of India with views of the ancient ghats.",
+    image: {
+      filename: "listingimage",
+      url: "/images/varanasi_heritage.png",
+    },
+    price: 1200,
+    location: "Varanasi",
+    country: "India",
+    geometry: { type: "Point", coordinates: [83.0061, 25.3176] }
+  },
+  {
+    title: "Ladakh Starlit Eco-Yurt",
+    description: "A luxury eco-resort under the brilliant stars of the Himalayas. Experience the rugged beauty of Ladakh in comfort and style.",
+    image: {
+      filename: "listingimage",
+      url: "/images/ladakh_yurt.png",
+    },
+    price: 1500,
+    location: "Leh-Ladakh",
+    country: "India",
+    geometry: { type: "Point", coordinates: [77.5771, 34.1526] }
   }
 ];
 
