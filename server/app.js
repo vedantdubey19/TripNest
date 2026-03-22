@@ -77,6 +77,23 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Currency Helpers
+app.locals.getCurrencySymbol = (country) => {
+    const c = country ? country.trim().toLowerCase() : "";
+    if (c === "india") return "₹";
+    if (c === "united states" || c === "usa" || c === "us") return "$";
+    if (c === "united kingdom" || c === "uk" || c === "gbp") return "£";
+    if (c === "italy" || c === "france" || c === "germany" || c === "spain") return "€";
+    return "$"; 
+};
+
+app.locals.formatPrice = (price, country) => {
+    if (!price) return "N/A";
+    const symbol = app.locals.getCurrencySymbol(country);
+    const locale = (country && country.trim().toLowerCase() === "india") ? "en-IN" : "en-US";
+    return `${symbol}${price.toLocaleString(locale)}`;
+};
+
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");

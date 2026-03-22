@@ -170,7 +170,7 @@
                 <strong class="d-block text-truncate mb-1"><%= listing.title %></strong>
                 <span class="text-secondary d-block"><%= listing.location %>, <%= listing.country %></span>
                 <span class="mt-2 d-block text-primary">
-                  <span class="fw-bold fs-5 text-white">₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></span> <span class="text-secondary">/night</span>
+                  <span class="fw-bold fs-5 text-white"><%= formatPrice(listing.price, listing.country) %></span> <span class="text-secondary">/night</span>
                   <i class="taxInfo text-secondary fst-normal ms-1" style="display: none; font-size: 0.9em;">+ 18% GST</i>
                 </span>
               </p>

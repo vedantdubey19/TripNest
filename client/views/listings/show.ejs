@@ -246,7 +246,7 @@
     <div class="booking-card-wrapper animate-fade-up" style="animation-delay: 0.3s;">
       <div class="booking-card">
         <div class="price-header mb-4">
-          ₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> <span>night</span>
+          <%= formatPrice(listing.price, listing.country) %> <span>night</span>
         </div>
         
         <form action="/listings/<%=listing._id%>/reservations" method="POST" class="needs-validation" novalidate>

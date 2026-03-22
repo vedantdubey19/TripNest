@@ -142,6 +142,18 @@ const sampleListings = [
     location: "Leh-Ladakh",
     country: "India",
     geometry: { type: "Point", coordinates: [77.5771, 34.1526] }
+  },
+  {
+    title: "London Luxury Penthouse",
+    description: "A sophisticated penthouse with iconic views of the Tower Bridge. Experience London's finest urban living in this ultra-premium residence.",
+    image: {
+      filename: "listingimage",
+      url: "/images/london_penthouse.png",
+    },
+    price: 600,
+    location: "London",
+    country: "United Kingdom",
+    geometry: { type: "Point", coordinates: [-0.0754, 51.5055] }
   }
 ];
 
