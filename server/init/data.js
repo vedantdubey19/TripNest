@@ -1,15 +1,15 @@
 const sampleListings = [
   {
-    title: "The Antigravity Escape — Floating Sky Retreat",
-    description: "Experience the impossible in this one-of-a-kind levitating cabin suspended high above the earth. Offering 360° sky views, smart levitation stabilizers, and zero-gravity sleeping pods, this property redefines luxury travel.",
+    title: "The Aetherial Haven",
+    description: "Perched on a cliff edge with breathtaking ocean views, this ultra-modern sanctuary offers the ultimate luxury experience. Featuring minimalist architecture, an infinity pool, and cinematic sunset vistas, it redefined high-end coastal living.",
     image: {
       filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1542739656-749363076602?auto=format&fit=crop&w=800&q=60",
+      url: "/images/aetherial_haven.png",
     },
-    price: 48500,
-    location: "Sky Heights, Himalayan Airspace",
+    price: 45000,
+    location: "Cliffside Heights",
     country: "India",
-    geometry: { type: "Point", coordinates: [78.0422, 30.3165] }
+    geometry: { type: "Point", coordinates: [73.8567, 18.5204] }
   },
   {
     title: "Cozy Beachfront Cottage",
