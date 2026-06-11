@@ -5,7 +5,7 @@ const Listing = require("../models/listing.js");
 const User = require("../models/user.js");
 
 if (process.env.NODE_ENV !== "production") {
-    require("dotenv").config({ path: path.join(__dirname, "../.env") });
+    require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 }
 
 const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/tripnest";

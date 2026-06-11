@@ -28,6 +28,10 @@ const isLoggedIn = (req, res, next) => {
 
 router.post("/", (req, res, next) => { console.log("HIT RESERVATION POST"); next(); }, isLoggedIn, validateReservation, wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
+    if (!listing) {
+        req.flash("error", "Listing does not exist!");
+        return res.redirect("/listings");
+    }
     let newReservation = new Reservation(req.body.reservation);
     newReservation.user = req.user._id;
     newReservation.listing = listing._id;

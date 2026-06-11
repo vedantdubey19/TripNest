@@ -78,6 +78,10 @@ module.exports.renderEditForm = async(req,res)=>{
 module.exports.updateListing = async(req,res)=>{
         let{id} = req.params;
         let listing = await Listing.findByIdAndUpdate(id,{...req.body.listing});
+        if(!listing){
+            req.flash("error", "Listing you requested does not exist!");
+            return res.redirect("/listings");
+        }
 
         if(typeof req.file !== "undefined"){
             let url = req.file.path;

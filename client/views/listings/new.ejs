@@ -45,9 +45,11 @@
         <div class="row">
           <div class="col-12 col-md-4 mb-3">
             <label for="price" class="form-label">Price</label>
-            <input name="listing[price]" 
+            <input type="number" 
+                   name="listing[price]" 
                    class="form-control" 
                    placeholder="1500" 
+                   min="0"
                    required>
             <div class="invalid-feedback">Price should be valid</div>
           </div>

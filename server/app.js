@@ -21,7 +21,6 @@ const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const reservationRouter = require("./routes/reservation.js");
 
-const { applyTimestamps } = require("./models/review.js");
 
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/tripnest';
 
