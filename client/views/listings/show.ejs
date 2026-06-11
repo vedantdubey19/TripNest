@@ -150,10 +150,10 @@
 
       <div class="host-info">
         <div class="host-avatar">
-          <%= listing.owner.username.charAt(0).toUpperCase() %>
+          <%= listing.owner ? listing.owner.username.charAt(0).toUpperCase() : 'U' %>
         </div>
         <div>
-          <h5 class="mb-0">Hosted by <%= listing.owner.username%></h5>
+          <h5 class="mb-0">Hosted by <%= listing.owner ? listing.owner.username : 'Unknown Owner' %></h5>
           <p class="text-secondary mb-0">Superhost · 5 years hosting</p>
         </div>
       </div>
@@ -272,7 +272,7 @@
           <p class="text-center text-secondary small mb-4">You won't be charged yet</p>
         </form>
 
-        <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+        <% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
           <hr class="my-4" style="border-color: var(--glass-border);">
           <div class="text-center mb-2 text-secondary small text-uppercase fw-bold">Owner Actions</div>
           <div class="d-flex gap-2">
